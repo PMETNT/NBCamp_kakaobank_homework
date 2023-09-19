@@ -34,7 +34,7 @@ class Holder(val binding: ItemRecyclerBinding) : RecyclerView.ViewHolder(binding
         image?.let {
             binding.textTitle.text = image.display_sitename
             binding.textDate.text = image.datetime
-            Glide.with(binding.imageItem).load(it.thumbnail_url).into(binding.imageItem)
+            Glide.with(binding.imageItem).load(it.thumbnail_url).override(600).into(binding.imageItem)
 
         }
     }

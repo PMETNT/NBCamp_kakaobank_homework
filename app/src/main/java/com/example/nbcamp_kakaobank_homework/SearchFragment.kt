@@ -18,12 +18,15 @@ import com.example.nbcamp_kakaobank_homework.image_data.ImageSearch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonDisposableHandle.parent
+import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
@@ -54,7 +57,7 @@ class SearchFragment : Fragment() {
         binding.recyclerViewSearch.layoutManager = GridLayoutManager(requireContext(), 2)
 
         binding.btnSearch.setOnClickListener {
-            Toast.makeText(requireContext(), "통신 성공!", Toast.LENGTH_SHORT)
+
             searchKeyword(
                 binding.etSearch.text.toString()
             )
@@ -78,34 +81,28 @@ class SearchFragment : Fragment() {
                 .build()
 
         val api: KakaoImageSearchAPI =
-            retrofit.create(KakaoImageSearchAPI::class.java)
+            retrofit.create()
 
-//        CoroutineScope(Dispatchers.IO).launch {
-//
-//            launch(Dispatchers.Main) {
-//
-//            }
-//
-//        }
+        try {
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = api.getImageSearchKeyword(API_info.API_KEY, keyword, "recency")
 
 
-        val call = api.getImageSearchKeyword(API_info.API_KEY, keyword)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        adapter.homework_imageList = response.body() as ImageSearch
+                        adapter.notifyDataSetChanged()
+                    }
+                }
 
-        call.enqueue(object : Callback<ImageSearch> {
-            override fun onResponse(
-                call: Call<ImageSearch>,
-                response: Response<ImageSearch>
-            ) {
-                adapter.homework_imageList = response.body() as ImageSearch
-                adapter.notifyDataSetChanged()
 
-                Toast.makeText(requireContext(), "통신 성공!", Toast.LENGTH_SHORT)
             }
 
-            override fun onFailure(call: Call<ImageSearch>, t: Throwable) {
-                Toast.makeText(requireContext(), "통신 실패!", Toast.LENGTH_SHORT)
-            }
-        })
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
     }
 
 

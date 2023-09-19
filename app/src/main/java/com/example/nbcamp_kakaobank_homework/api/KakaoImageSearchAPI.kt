@@ -11,14 +11,15 @@ import retrofit2.http.Query
 //api 호출?
 interface KakaoImageSearchAPI {
     @GET("v2/search/image")
-    fun getImageSearchKeyword(                // 원래 suspend?
+    suspend fun getImageSearchKeyword(
+        // 원래 suspend?
         @Header("Authorization") apiKey: String,
-        @Query("query") query : String,
-//            @Query("sort") sort : String,
+        @Query("query") query: String,
+        @Query("sort") sort: String,
 //            @Query("page") page: Int,
 //            @Query("size") size: Int
 
-    ): Call<ImageSearch>
+    ): Response<ImageSearch>
 }
 
 object API_info {
