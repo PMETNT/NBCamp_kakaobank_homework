@@ -3,11 +3,15 @@ package com.example.nbcamp_kakaobank_homework
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.nbcamp_kakaobank_homework.databinding.ActivityMainBinding
+import com.example.nbcamp_kakaobank_homework.image_data.Document
+import com.example.nbcamp_kakaobank_homework.image_data.ImageSearch
 import com.google.android.material.tabs.TabLayoutMediator
+import retrofit2.Call
+import retrofit2.http.GET
 
 class MainActivity : AppCompatActivity() {
 
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,9 +19,9 @@ class MainActivity : AppCompatActivity() {
 
         // 뷰 페이져2 설정
         val usedList = listOf(
-            MyBoxFragment(),
-            SearchFragment()
-            )
+            SearchFragment(),
+            MyBoxFragment()
+        )
 
         val adapter = FragmentAdapter(this)
         adapter.fragmentList = usedList
@@ -31,16 +35,6 @@ class MainActivity : AppCompatActivity() {
         }.attach()
 
 
-
-
-
-
-
-
-
-
-
-
-
     }
+
 }
