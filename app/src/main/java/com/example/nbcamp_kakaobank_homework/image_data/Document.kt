@@ -8,5 +8,10 @@ data class Document(
     val height: Int,
     val image_url: String,
     val thumbnail_url: String,
-    val width: Int
+    val width: Int,
+      // 동영상추가
+    val thumbnail: String,
+    val title: String
+
+
 )

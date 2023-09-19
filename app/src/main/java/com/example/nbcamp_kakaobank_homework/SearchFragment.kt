@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nbcamp_kakaobank_homework.api.API_info
 import com.example.nbcamp_kakaobank_homework.api.KakaoImageSearchAPI
+import com.example.nbcamp_kakaobank_homework.api.KakaoVclipSearchAPI
 import com.example.nbcamp_kakaobank_homework.databinding.FragmentSearchBinding
 import com.example.nbcamp_kakaobank_homework.image_data.Document
 import com.example.nbcamp_kakaobank_homework.image_data.ImageSearch
@@ -58,9 +59,9 @@ class SearchFragment : Fragment() {
 
         binding.btnSearch.setOnClickListener {
 
-            searchKeyword(
-                binding.etSearch.text.toString()
-            )
+            val keyword = binding.etSearch.text.toString()
+
+            searchKeyword(keyword)
 
 
         }
@@ -80,17 +81,26 @@ class SearchFragment : Fragment() {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
-        val api: KakaoImageSearchAPI =
-            retrofit.create()
+        val api: KakaoImageSearchAPI = retrofit.create()
+        val api2: KakaoVclipSearchAPI = retrofit.create()  // 동영상 검색 1차
+
 
         try {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = api.getImageSearchKeyword(API_info.API_KEY, keyword, "recency")
+                val response2 = api2.getVclipSearchKeyword(API_info.API_KEY, keyword, "recency") // 동영상 검색 1차
 
 
                 withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
+                    if (response.isSuccessful && response2.isSuccessful) {
                         adapter.homework_imageList = response.body() as ImageSearch
+
+                        // 동영상 검색 1차
+                        adapter.homework_imageList!!.documents.addAll(
+                            response2.body()!!.documents
+                        )
+
+                        adapter.homework_imageList!!.documents.sortByDescending { it.datetime }
                         adapter.notifyDataSetChanged()
                     }
                 }
