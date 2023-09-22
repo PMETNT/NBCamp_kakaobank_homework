@@ -2,16 +2,40 @@ package com.example.nbcamp_kakaobank_homework
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import com.example.nbcamp_kakaobank_homework.Utils.getListPref
+import com.example.nbcamp_kakaobank_homework.Utils.setListPref
 import com.example.nbcamp_kakaobank_homework.databinding.ActivityMainBinding
+import com.example.nbcamp_kakaobank_homework.image_data.Document
+import com.example.nbcamp_kakaobank_homework.model.Bookmark
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        Log.d("jiseong1","처음 ${Bookmark.bookmarkList} 비어있는게 맞음")
+
+        var storedBookmarkList = getListPref(this, "bookmark")
+        Log.d("jiseong1","${storedBookmarkList}")
+        Bookmark.bookmarkList = storedBookmarkList
+        bookmark_adapter.notifyDataSetChanged()
+
+        Log.d("jiseong1","${Bookmark.bookmarkList}")
+
+
+
+
+
+
+
+
 
         // 뷰 페이져2 설정
         val usedList = listOf(
@@ -33,10 +57,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        setListPref(this, "bookmark", Bookmark.bookmarkList)
+        Log.d("jiseong1","저장하고 종료했습니당")
+    }
+
+
+
+
 }
-/** TODO() 클릭해서 해당 포지션의 데이터를 다른 리스트에 넣고,
- *  그 리스트에 있는 거가 보관함에서 리사이클러뷰로 나오고\
- *  shared 어쩌고로 데이터 보존시키면 끝?
- *
- */
 

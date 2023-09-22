@@ -42,7 +42,7 @@ class SearchAdapter : RecyclerView.Adapter<Holder>() {
 }
 
 class Holder(val binding: ItemRecyclerBinding) : RecyclerView.ViewHolder(binding.root) {
-       fun setImage(image: Document?, position: Int) {
+    fun setImage(image: Document?, position: Int) {
 
 
         image?.let {
@@ -52,7 +52,8 @@ class Holder(val binding: ItemRecyclerBinding) : RecyclerView.ViewHolder(binding
                 .into(binding.imageItem)
             binding.btnBookmark.setOnClickListener {
                 Bookmark.bookmarkList.add(image)
-                bookmark_adapter.notifyItemInserted(position)
+                bookmark_adapter.notifyDataSetChanged()
+//                bookmark_adapter.notifyItemInserted(position)
 
 
 
@@ -70,7 +71,8 @@ class Holder(val binding: ItemRecyclerBinding) : RecyclerView.ViewHolder(binding
             Glide.with(binding.imageItem).load(it.thumbnail).override(600).into(binding.imageItem)
             binding.btnBookmark.setOnClickListener {
                 Bookmark.bookmarkList.add(image)
-                bookmark_adapter.notifyItemInserted(position)
+                bookmark_adapter.notifyDataSetChanged()
+//                bookmark_adapter.notifyItemInserted(position)
                 Log.d("bookmark", "${Bookmark.bookmarkList}")
             }
 
