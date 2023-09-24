@@ -7,6 +7,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
+import java.security.AccessControlContext
+
 
 object Utils {
 
@@ -25,7 +27,8 @@ object Utils {
 
         var makeGson = GsonBuilder().create()
 
-        var listType : TypeToken<MutableList<Document>> = object :TypeToken<MutableList<Document>>() {}
+        var listType: TypeToken<MutableList<Document>> =
+            object : TypeToken<MutableList<Document>>() {}
 
         var json = makeGson.toJson(values, listType.type)
 
@@ -40,12 +43,23 @@ object Utils {
         key: String
     ): MutableList<Document> {
         val prefs = context.getSharedPreferences("SETTINGS", Context.MODE_PRIVATE)
-        val json = prefs.getString(key, "{}")
+        val json = prefs.getString(key, null)
 
-        var makeGson = GsonBuilder().create()
-        var listType : TypeToken<MutableList<Document>> = object :TypeToken<MutableList<Document>>() {}
+        if (json != null) {
+            var makeGson = GsonBuilder().create()
+            var listType: TypeToken<MutableList<Document>> =
+                object : TypeToken<MutableList<Document>>() {}
 
-        var storedData : MutableList<Document> = makeGson.fromJson(json, listType)
+            var storedData: MutableList<Document> = makeGson.fromJson(json, listType)
+
+            return storedData
+
+        } else {
+            return mutableListOf<Document>()
+        }
+
+
+
 //        val gson = Gson()
 //
 //        val storedData: MutableList<Document> = gson.fromJson(
@@ -53,7 +67,7 @@ object Utils {
 //            object : TypeToken<MutableList<Document>>() {}.type
 //        )
 
-        return storedData
+
     }
 
 }

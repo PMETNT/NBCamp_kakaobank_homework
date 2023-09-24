@@ -15,26 +15,18 @@ class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        Log.d("jiseong1","처음 ${Bookmark.bookmarkList} 비어있는게 맞음")
+        Log.d("jiseong1", "처음 ${Bookmark.bookmarkList} 비어있는게 맞음")
+
 
         var storedBookmarkList = getListPref(this, "bookmark")
-        Log.d("jiseong1","${storedBookmarkList}")
+        Log.d("jiseong1", "${storedBookmarkList}")
         Bookmark.bookmarkList = storedBookmarkList
         bookmark_adapter.notifyDataSetChanged()
-
-        Log.d("jiseong1","${Bookmark.bookmarkList}")
-
-
-
-
-
-
-
+        Log.d("jiseong1", "${Bookmark.bookmarkList}")
 
 
         // 뷰 페이져2 설정
@@ -56,13 +48,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-
-    override fun onPause() {
-        super.onPause()
-        setListPref(this, "bookmark", Bookmark.bookmarkList)
-        Log.d("jiseong1","저장하고 종료했습니당")
-    }
-
 
 
 

@@ -1,26 +1,32 @@
 package com.example.nbcamp_kakaobank_homework
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.nbcamp_kakaobank_homework.bookmark.BookmarkAdapter
 import com.example.nbcamp_kakaobank_homework.databinding.ItemRecyclerBinding
 import com.example.nbcamp_kakaobank_homework.image_data.Document
 import com.example.nbcamp_kakaobank_homework.image_data.ImageSearch
 import com.example.nbcamp_kakaobank_homework.model.Bookmark
+import java.security.AccessController.getContext
 
 
 class SearchAdapter : RecyclerView.Adapter<Holder>() {
     var homework_imageList: ImageSearch? = null
 
 
+
+
+
+
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding =
             ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return Holder(binding)
+        return Holder(binding, parent.context)
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
@@ -41,7 +47,7 @@ class SearchAdapter : RecyclerView.Adapter<Holder>() {
     }
 }
 
-class Holder(val binding: ItemRecyclerBinding) : RecyclerView.ViewHolder(binding.root) {
+class Holder(val binding: ItemRecyclerBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
     fun setImage(image: Document?, position: Int) {
 
 
@@ -53,6 +59,9 @@ class Holder(val binding: ItemRecyclerBinding) : RecyclerView.ViewHolder(binding
             binding.btnBookmark.setOnClickListener {
                 Bookmark.bookmarkList.add(image)
                 bookmark_adapter.notifyDataSetChanged()
+
+                Utils.setListPref(context, "bookmark", Bookmark.bookmarkList)
+                Log.d("jiseong1", "setImage에서 setListPref 실행")
 //                bookmark_adapter.notifyItemInserted(position)
 
 
@@ -72,6 +81,9 @@ class Holder(val binding: ItemRecyclerBinding) : RecyclerView.ViewHolder(binding
             binding.btnBookmark.setOnClickListener {
                 Bookmark.bookmarkList.add(image)
                 bookmark_adapter.notifyDataSetChanged()
+
+                Utils.setListPref(context, "bookmark", Bookmark.bookmarkList)
+                Log.d("jiseong1", "setVclip에서 setListPref 실행")
 //                bookmark_adapter.notifyItemInserted(position)
                 Log.d("bookmark", "${Bookmark.bookmarkList}")
             }
